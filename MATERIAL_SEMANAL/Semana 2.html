@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semana 2: Librerías Fundamentales y APIs</title>
+    <style>
+        :root {
+            --utem-blue: #002b5c; --utem-blue-light: #0077cc; --text-dark: #2d3748; --text-light: #ffffff;
+            --bg-light: #f7fafc; --bg-dark: #1a202c; --surface-light: #ffffff; --surface-dark: #2d3748;
+            --highlight-bg: #ebf8ff; --highlight-border: #90cdf4; --highlight-text: #3182ce;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05); --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08);
+            --border-radius-md: 10px; --border-radius-lg: 16px;
+            --font-family-main: "Century Gothic", "Apple Gothic", "URW Gothic L", sans-serif;
+            --transition-fast: all 0.3s ease-in-out; --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --text-dark: #e2e8f0; --bg-light: var(--bg-dark); --surface-light: var(--surface-dark);
+                --border-color-light: var(--border-color-dark); --highlight-bg: #1e3a8a; --highlight-border: #60a5fa;
+                --highlight-text: #bfdbfe;
+            }
+        }
+        body { font-family: var(--font-family-main); background-color: var(--bg-light); color: var(--text-dark); margin: 0; padding-top: 80px; padding-bottom: 60px; line-height: 1.6; overflow: hidden; }
+        header { background-color: rgba(0, 43, 92, 0.95); backdrop-filter: blur(8px); color: var(--text-light); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-md); position: fixed; top: 0; width: 100%; z-index: 1001; box-sizing: border-box; height: 80px; }
+        .logo { height: 50px; width: auto; }
+        .header-text-container { text-align: right; }
+        .header-title-main { font-size: 1.3em; font-weight: 600; margin: 0; }
+        .header-subtitle-main { font-size: 0.8em; margin: 2px 0; color: #e0e0e0; font-weight: 300; }
+        .contact-info-header { margin-top: 4px; font-size: 0.8em; color: #ced4da; }
+        .contact-info-header a { color: #e9ecef; text-decoration: none; }
+        footer { background-color: rgba(0, 43, 92, 0.95); color: var(--text-light); text-align: center; padding: 12px; position: fixed; width: 100%; bottom: 0; z-index: 1001; font-size: 0.85em; height: 60px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; backdrop-filter: blur(8px); border-top: 1px solid rgba(255, 255, 255, 0.1); }
+        footer p { margin: 2px 0; }
+        main#slider { width: 100%; height: calc(100vh - 140px); position: relative; overflow: hidden; }
+        .slides-container { display: flex; height: 100%; width: 100%; transition: var(--transition-slow); }
+
+        .slide {
+            width: 100%; height: 100%; flex-shrink: 0; box-sizing: border-box; padding: 2rem;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .slide-content {
+            background-color: var(--surface-light); border: 1px solid var(--border-color-light);
+            border-radius: var(--border-radius-lg); box-shadow: var(--shadow-md);
+            padding: 2rem 2.5rem; max-width: 950px; width: 90%; max-height: 95%; overflow-y: auto;
+            opacity: 0; transform: scale(0.98); transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+        .slide.active .slide-content {
+            opacity: 1; transform: scale(1);
+        }
+        .slide-content h2 { font-size: 2em; font-weight: 600; color: var(--utem-blue); margin-top: 0; border-bottom: 2px solid var(--utem-blue); padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        .slide-content h3 { font-size: 1.3em; font-weight: 600; color: var(--utem-blue-light); margin-top: 2rem; margin-bottom: 1rem; }
+        .slide-content p { margin-bottom: 1.2rem; line-height: 1.7; text-align: justify; }
+        .slide-content strong { color: var(--utem-blue); font-weight: 600; }
+        .slide-content ul { list-style-type: disc; padding-left: 25px; }
+        .slide-content li { margin-bottom: 0.8rem; }
+        .code-box { background-color: #2d3748; color: #f7fafc; padding: 1rem; border-radius: var(--border-radius-md); font-family: 'Courier New', Courier, monospace; margin: 1rem 0; font-size: 0.9em; white-space: pre-wrap; word-break: break-all; }
+        .example-box { background-color: var(--highlight-bg); border: 1px solid var(--highlight-border); border-left: 5px solid var(--highlight-border); padding: 1.5rem; border-radius: var(--border-radius-md); margin-top: 1rem; }
+        .example-box-title { font-weight: bold; color: var(--highlight-text); margin-bottom: 0.5rem; display: block; }
+
+        @media (prefers-color-scheme: dark) {
+            .slide-content h2 { color: var(--utem-blue-light); border-bottom-color: var(--utem-blue-light); }
+            .slide-content strong { color: var(--utem-blue-light); }
+        }
+
+        .nav-button { position: absolute; top: 50%; transform: translateY(-50%); background-color: rgba(0, 43, 92, 0.6); color: white; border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; z-index: 100; display: flex; align-items: center; justify-content: center; transition: var(--transition-fast); }
+        .nav-button:hover { background-color: var(--utem-blue); transform: translateY(-50%) scale(1.1); }
+        .nav-button:disabled { background-color: #9ca3af; cursor: not-allowed; opacity: 0.5; }
+        #prevBtn { left: 1rem; }
+        #nextBtn { right: 1rem; }
+
+        @media (max-width: 900px) {
+            body { padding-top: 70px; }
+            header { height: 70px; padding: 5px 15px; flex-direction: row-reverse; }
+            .logo { height: 40px; }
+            main#slider { height: calc(100vh - 130px); }
+            .slide { padding: 1rem; }
+            .slide-content { padding: 1.5rem; max-width: 100%; width: 100%; }
+            .slide-content h2 { font-size: 1.5em; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-text-container">
+            <h1 class="header-title-main">Fundamentos de Data Science</h1>
+            <p class="header-subtitle-main">Planificación Semestral 2025</p>
+            <div class="contact-info-header">
+                <span>Carlos Muñoz S. - </span><a href="mailto:c.munozs@utem.cl">c.munozs@utem.cl</a>
+            </div>
+        </div>
+        <img src="https://cdn.remotexs.co/institute-logos/sibutemnewlogo1.png" alt="Logo UTEM" class="logo" onerror="this.style.display='none'">
+    </header>
+    <main id="slider">
+        <div class="slides-container"></div>
+        <button id="prevBtn" class="nav-button" title="Anterior"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg> </button>
+        <button id="nextBtn" class="nav-button" title="Siguiente"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg> </button>
+    </main>
+    <footer>
+        <p>&copy; 2025 Universidad Tecnológica Metropolitana</p>
+        <p>Departamento de Informática y Computación</p>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // ==========================================================================
+        // CONTENIDO EXCLUSIVO PARA LA SEMANA 2
+        // ==========================================================================
+        const week_slides_data = [
+            { // Slide 1
+                title: "Semana 2: Librerías Fundamentales y APIs 🛠️",
+                content: `
+                    <h3>Las Herramientas del Científico de Datos</h3>
+                    <p>¡Bienvenidos a la Semana 2! La semana pasada aprendimos a usar Python con sus herramientas básicas. Hoy, le daremos superpoderes. El verdadero potencial de Python para la ciencia de datos reside en su increíble ecosistema de <strong>librerías</strong> especializadas.</p>
+                    <p>Esta semana nos enfocaremos en las dos más importantes: <strong>NumPy</strong> para computación numérica de alto rendimiento y <strong>Pandas</strong> para la manipulación y análisis de datos tabulados. Además, aprenderemos a obtener datos del mundo real consumiendo <strong>APIs</strong>.</p>
+                `
+            },
+            { // Slide 2
+                title: "¿Por qué usar Librerías?",
+                content: `
+                    <p>Una librería es un conjunto de código pre-escrito y optimizado que podemos importar en nuestros proyectos para realizar tareas específicas sin tener que "reinventar la rueda".</p>
+                    <div class="example-box">
+                        <span class="example-box-title">Analogía: Construir con Legos</span>
+                        <p>Imagina que Python básico te da los bloques de Lego más pequeños. Puedes construir cualquier cosa, pero te tomará mucho tiempo. Las librerías como NumPy y Pandas te dan piezas pre-ensambladas y especializadas (ruedas, motores, ventanas), permitiéndote construir modelos más complejos de forma mucho más rápida y eficiente.</p>
+                    </div>
+                    <p>Usar librerías nos permite enfocarnos en resolver el problema en lugar de programar funciones matemáticas o de manipulación de datos desde cero.</p>
+                `
+            },
+            { // Slide 3
+                title: "NumPy: La Base Numérica",
+                content: `
+                    <p><strong>NumPy (Numerical Python)</strong> es la librería fundamental para la computación científica en Python. Su objeto principal es el <strong>ndarray</strong> (array N-dimensional).</p>
+                    <p>Un array de NumPy es similar a una lista de Python, pero con dos ventajas clave:</p>
+                    <ul>
+                        <li><strong>Rendimiento:</strong> Es mucho más rápido para operaciones matemáticas, ya que está implementado en C.</li>
+                        <li><strong>Eficiencia:</strong> Ocupa significativamente menos memoria.</li>
+                    </ul>
+                    <p>Casi todas las librerías de Data Science en Python, incluyendo Pandas, están construidas sobre NumPy.</p>
+                    <div class="code-box">
+# Convención para importar NumPy
+import numpy as np
+
+# Crear un array de NumPy desde una lista
+lista_notas = [6.5, 7.0, 5.8, 4.9]
+array_notas = np.array(lista_notas)
+                    </div>
+                `
+            },
+            { // Slide 4
+                title: "El Poder de la Vectorización en NumPy",
+                content: `
+                    <p>La principal ventaja de NumPy es la <strong>vectorización</strong>: la capacidad de realizar operaciones sobre arrays completos sin necesidad de escribir bucles <code>for</code>.</p>
+                    <h3>Ejemplo: Subir 5 décimas a cada nota</h3>
+                    <p><strong>Con Listas de Python (sin NumPy):</strong></p>
+                    <div class="code-box">
+notas_finales = []
+for nota in lista_notas:
+    notas_finales.append(nota + 0.5)
+                    </div>
+                    <p><strong>Con NumPy (vectorizado):</strong></p>
+                    <div class="code-box">
+# Simplemente sumamos 0.5 al array completo
+notas_finales_np = array_notas + 0.5
+                    </div>
+                    <p>Para millones de datos, la versión con NumPy es cientos de veces más rápida.</p>
+                `
+            },
+            { // Slide 5
+                title: "Pandas: El Excel de Python",
+                content: `
+                    <p><strong>Pandas</strong> es la librería más importante para la manipulación y análisis de datos tabulados (como tablas o hojas de cálculo). Su estructura de datos principal es el <strong>DataFrame</strong>.</p>
+                    <p>Un DataFrame es una tabla de dos dimensiones, similar a una hoja de Excel o una tabla de una base de datos SQL, pero con una funcionalidad inmensamente superior para limpiar, transformar, filtrar y analizar datos.</p>
+                    <h3>Componentes de un DataFrame</h3>
+                    <ul>
+                        <li><strong>Índice (Index):</strong> El identificador de cada fila.</li>
+                        <li><strong>Columnas (Columns):</strong> Los nombres de cada columna.</li>
+                        <li><strong>Datos (Data):</strong> Los valores, almacenados internamente usando NumPy.</li>
+                    </ul>
+                `
+            },
+            { // Slide 6
+                title: "Trabajando con DataFrames",
+                content: `
+                    <p>La forma más común de usar Pandas es leer datos de un archivo, pero también podemos crear DataFrames desde cero.</p>
+                    <div class="code-box">
+import pandas as pd
+
+# Crear un DataFrame desde un diccionario
+datos = {
+    "Nombre": ["Ana", "Juan", "Sofía"],
+    "Carrera": ["Ing. Civil", "Ing. Informática", "Ing. Civil"],
+    "Edad": [22, 25, 23]
+}
+df_alumnos = pd.DataFrame(datos)
+                    </div>
+                    <p>Una vez creado, podemos hacer análisis rápidamente:</p>
+                    <ul>
+                        <li><strong>Seleccionar una columna:</strong> <code>df_alumnos['Nombre']</code></li>
+                        <li><strong>Filtrar filas por una condición:</strong> <code>df_alumnos[df_alumnos['Edad'] > 22]</code></li>
+                        <li><strong>Calcular estadísticas básicas:</strong> <code>df_alumnos['Edad'].mean()</code></li>
+                    </ul>
+                `
+            },
+             { // Slide 7
+                title: "Obtención de Datos: Leyendo Archivos",
+                content: `
+                    <p>El verdadero poder de Pandas se revela al leer datos del mundo real. Con una sola línea de código, podemos cargar archivos complejos en un DataFrame listo para el análisis.</p>
+                    <h3>Funciones más comunes:</h3>
+                    <div class="code-box">
+# Leer un archivo CSV (Comma-Separated Values)
+df_csv = pd.read_csv('datos_ventas.csv')
+
+# Leer una hoja de un archivo Excel
+df_excel = pd.read_excel('reporte_financiero.xlsx', sheet_name='Enero')
+
+# Leer datos desde una base de datos SQL
+# (requiere una conexión a la base de datos)
+df_sql = pd.read_sql('SELECT * FROM clientes', mi_conexion_sql)
+                    </div>
+                    <p>Esto simplifica enormemente la etapa de <strong>obtención y carga de datos</strong> del proceso de ciencia de datos.</p>
+                `
+            },
+            { // Slide 8
+                title: "¿Qué es una API?",
+                content: `
+                    <p>Una <strong>API (Application Programming Interface / Interfaz de Programación de Aplicaciones)</strong> es un conjunto de reglas y definiciones que permite que dos aplicaciones de software se comuniquen entre sí.</p>
+                    <div class="example-box">
+                       <span class="example-box-title">Analogía: El Mesero del Restaurante</span>
+                       <p>Imagina que estás en un restaurante. Tú (el cliente) no entras a la cocina (el servidor con los datos) a preparar tu comida. En su lugar, le das tu pedido (una <strong>petición</strong> o <em>request</em>) a un mesero (la <strong>API</strong>). El mesero lleva tu pedido a la cocina, la cocina prepara el plato (los <strong>datos</strong>), y el mesero te lo trae de vuelta (la <strong>respuesta</strong> o <em>response</em>).</p>
+                    </div>
+                    <p>Usamos APIs para obtener datos actualizados y en tiempo real desde servicios web, como datos del clima, indicadores económicos o publicaciones de redes sociales.</p>
+                `
+            },
+            { // Slide 9
+                title: "Consumiendo una API en Python",
+                content: `
+                    <p>Para consumir APIs en Python, usamos la librería <strong><code>requests</code></strong>. El proceso es muy directo y se integra perfectamente con Pandas.</p>
+                    <div class="example-box">
+                        <span class="example-box-title">Ejemplo: Obtener datos de la UF desde la API del Banco Central de Chile (mindicador.cl)</span>
+                        <div class="code-box">
+import requests
+import pandas as pd
+
+# 1. Definir la URL de la API
+url = 'https://mindicador.cl/api/uf'
+
+# 2. Hacer la petición GET a la API
+response = requests.get(url)
+
+# 3. Convertir la respuesta JSON a un diccionario de Python
+data = response.json()
+
+# 4. Convertir los datos a un DataFrame de Pandas
+df_uf = pd.DataFrame(data['serie'])
+
+# 5. ¡Analizar!
+print(df_uf.head())
+                        </div>
+                    </div>
+                `
+            },
+            { // Slide 10
+                title: "Resumen y Próximos Pasos",
+                content: `
+                    <h3>Resumen de la Semana 2</h3>
+                    <ul>
+                        <li>Las <strong>librerías</strong> extienden el poder de Python. <strong>NumPy</strong> nos da arrays rápidos y vectorización, mientras que <strong>Pandas</strong> nos da DataFrames para manipular datos tabulados.</li>
+                        <li>Hemos aprendido a leer datos desde archivos (CSV, Excel) y a consumir <strong>APIs</strong> usando la librería <code>requests</code> para obtener datos en tiempo real.</li>
+                        <li>La combinación <code>requests</code> + <code>pandas</code> es una de las más poderosas para la obtención de datos.</li>
+                    </ul>
+                    <h3>Próxima Semana: Estadística Aplicada y Visualización</h3>
+                    <p>Según el programa, ahora que sabemos cómo obtener y manipular datos, la próxima semana aprenderemos a explorarlos y entenderlos. Aplicaremos <strong>estadística descriptiva</strong> y crearemos nuestras primeras <strong>visualizaciones</strong> con librerías como Matplotlib y Seaborn.</p>
+                `
+            }
+        ];
+
+        // ==========================================================================
+        // LÓGICA DEL SLIDER Y RENDERIZADO (NO REQUIERE CAMBIOS)
+        // ==========================================================================
+        function createContentSlide(slideData) {
+            const slide = document.createElement('div');
+            slide.className = 'slide';
+            slide.innerHTML = `
+                <div class="slide-content">
+                    <h2>${slideData.title}</h2>
+                    ${slideData.content}
+                </div>
+            `;
+            return slide;
+        }
+
+        function initializeSlider() {
+            const slidesContainer = document.querySelector('.slides-container');
+            const prevBtn = document.getElementById('prevBtn'), nextBtn = document.getElementById('nextBtn');
+            let currentSlide = 0;
+
+            slidesContainer.innerHTML = '';
+
+            week_slides_data.forEach(data => {
+                slidesContainer.appendChild(createContentSlide(data));
+            });
+            
+            const slides = document.querySelectorAll('.slide');
+            
+            const goToSlide = (index) => {
+                slidesContainer.style.transform = `translateX(-${index * 100}%)`;
+                slides.forEach((slide, i) => {
+                    slide.classList.toggle('active', i === index);
+                });
+                currentSlide = index;
+                prevBtn.disabled = index === 0;
+                nextBtn.disabled = index === slides.length - 1;
+            }
+            
+            prevBtn.addEventListener('click', () => { if (currentSlide > 0) goToSlide(currentSlide - 1); });
+            nextBtn.addEventListener('click', () => { if (currentSlide < slides.length - 1) goToSlide(currentSlide + 1); });
+            
+            if (slides.length > 0) {
+                 goToSlide(0);
+            }
+        }
+
+        initializeSlider();
+    });
+    </script>
+</body>
+</html>

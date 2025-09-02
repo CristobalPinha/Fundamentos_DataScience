@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semana 1: Introducción a Python y Data Science</title>
+    <style>
+        :root {
+            --utem-blue: #002b5c; --utem-blue-light: #0077cc; --text-dark: #2d3748; --text-light: #ffffff;
+            --bg-light: #f7fafc; --bg-dark: #1a202c; --surface-light: #ffffff; --surface-dark: #2d3748;
+            --highlight-bg: #ebf8ff; --highlight-border: #90cdf4; --highlight-text: #3182ce;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05); --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08);
+            --border-radius-md: 10px; --border-radius-lg: 16px;
+            --font-family-main: "Century Gothic", "Apple Gothic", "URW Gothic L", sans-serif;
+            --transition-fast: all 0.3s ease-in-out; --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --text-dark: #e2e8f0; --bg-light: var(--bg-dark); --surface-light: var(--surface-dark);
+                --border-color-light: var(--border-color-dark); --highlight-bg: #1e3a8a; --highlight-border: #60a5fa;
+                --highlight-text: #bfdbfe;
+            }
+        }
+        body { font-family: var(--font-family-main); background-color: var(--bg-light); color: var(--text-dark); margin: 0; padding-top: 80px; padding-bottom: 60px; line-height: 1.6; overflow: hidden; }
+        header { background-color: rgba(0, 43, 92, 0.95); backdrop-filter: blur(8px); color: var(--text-light); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-md); position: fixed; top: 0; width: 100%; z-index: 1001; box-sizing: border-box; height: 80px; }
+        .logo { height: 50px; width: auto; }
+        .header-text-container { text-align: right; }
+        .header-title-main { font-size: 1.3em; font-weight: 600; margin: 0; }
+        .header-subtitle-main { font-size: 0.8em; margin: 2px 0; color: #e0e0e0; font-weight: 300; }
+        .contact-info-header { margin-top: 4px; font-size: 0.8em; color: #ced4da; }
+        .contact-info-header a { color: #e9ecef; text-decoration: none; }
+        footer { background-color: rgba(0, 43, 92, 0.95); color: var(--text-light); text-align: center; padding: 12px; position: fixed; width: 100%; bottom: 0; z-index: 1001; font-size: 0.85em; height: 60px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; backdrop-filter: blur(8px); border-top: 1px solid rgba(255, 255, 255, 0.1); }
+        footer p { margin: 2px 0; }
+        main#slider { width: 100%; height: calc(100vh - 140px); position: relative; overflow: hidden; }
+        .slides-container { display: flex; height: 100%; width: 100%; transition: var(--transition-slow); }
+
+        .slide {
+            width: 100%; height: 100%; flex-shrink: 0; box-sizing: border-box; padding: 2rem;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .slide-content {
+            background-color: var(--surface-light); border: 1px solid var(--border-color-light);
+            border-radius: var(--border-radius-lg); box-shadow: var(--shadow-md);
+            padding: 2rem 2.5rem; max-width: 950px; width: 90%; max-height: 95%; overflow-y: auto;
+            opacity: 0; transform: scale(0.98); transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+        .slide.active .slide-content {
+            opacity: 1; transform: scale(1);
+        }
+        .slide-content h2 { font-size: 2em; font-weight: 600; color: var(--utem-blue); margin-top: 0; border-bottom: 2px solid var(--utem-blue); padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        .slide-content h3 { font-size: 1.3em; font-weight: 600; color: var(--utem-blue-light); margin-top: 2rem; margin-bottom: 1rem; }
+        .slide-content p { margin-bottom: 1.2rem; line-height: 1.7; text-align: justify; }
+        .slide-content strong { color: var(--utem-blue); font-weight: 600; }
+        .slide-content ul { list-style-type: disc; padding-left: 25px; }
+        .slide-content li { margin-bottom: 0.8rem; }
+        .code-box { background-color: #2d3748; color: #f7fafc; padding: 1rem; border-radius: var(--border-radius-md); font-family: 'Courier New', Courier, monospace; margin: 1rem 0; font-size: 0.9em; white-space: pre-wrap; word-break: break-all; }
+        .example-box { background-color: var(--highlight-bg); border: 1px solid var(--highlight-border); border-left: 5px solid var(--highlight-border); padding: 1.5rem; border-radius: var(--border-radius-md); margin-top: 1rem; }
+        .example-box-title { font-weight: bold; color: var(--highlight-text); margin-bottom: 0.5rem; display: block; }
+
+        @media (prefers-color-scheme: dark) {
+            .slide-content h2 { color: var(--utem-blue-light); border-bottom-color: var(--utem-blue-light); }
+            .slide-content strong { color: var(--utem-blue-light); }
+        }
+
+        .nav-button { position: absolute; top: 50%; transform: translateY(-50%); background-color: rgba(0, 43, 92, 0.6); color: white; border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; z-index: 100; display: flex; align-items: center; justify-content: center; transition: var(--transition-fast); }
+        .nav-button:hover { background-color: var(--utem-blue); transform: translateY(-50%) scale(1.1); }
+        .nav-button:disabled { background-color: #9ca3af; cursor: not-allowed; opacity: 0.5; }
+        #prevBtn { left: 1rem; }
+        #nextBtn { right: 1rem; }
+
+        @media (max-width: 900px) {
+            body { padding-top: 70px; }
+            header { height: 70px; padding: 5px 15px; flex-direction: row-reverse; }
+            .logo { height: 40px; }
+            main#slider { height: calc(100vh - 130px); }
+            .slide { padding: 1rem; }
+            .slide-content { padding: 1.5rem; max-width: 100%; width: 100%; }
+            .slide-content h2 { font-size: 1.5em; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-text-container">
+            <h1 class="header-title-main">Fundamentos de Data Science</h1>
+            <p class="header-subtitle-main">Planificación Semestral 2025</p>
+            <div class="contact-info-header">
+                <span>Carlos Muñoz S. - </span><a href="mailto:c.munozs@utem.cl">c.munozs@utem.cl</a>
+            </div>
+        </div>
+        <img src="https://cdn.remotexs.co/institute-logos/sibutemnewlogo1.png" alt="Logo UTEM" class="logo" onerror="this.style.display='none'">
+    </header>
+    <main id="slider">
+        <div class="slides-container"></div>
+        <button id="prevBtn" class="nav-button" title="Anterior"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg> </button>
+        <button id="nextBtn" class="nav-button" title="Siguiente"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg> </button>
+    </main>
+    <footer>
+        <p>&copy; 2025 Universidad Tecnológica Metropolitana</p>
+        <p>Departamento de Informática y Computación</p>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // ==========================================================================
+        // CONTENIDO EXCLUSIVO PARA LA SEMANA 1
+        // ==========================================================================
+        const week_slides_data = [
+            { // Slide 1
+                title: "Semana 1: Introducción a Python y Data Science 🐍",
+                content: `
+                    <h3>El Viaje Comienza Aquí</h3>
+                    <p>¡Bienvenidos al curso de Fundamentos de Data Science! Esta primera semana es la más importante, ya que sentaremos las bases conceptuales y técnicas para todo el semestre. Daremos una <strong>visión general de la disciplina</strong> y comenzaremos a trabajar con nuestra herramienta principal: <strong>Python</strong>.</p>
+                    <p>Hoy aprenderemos qué es la Ciencia de Datos, por qué es tan relevante, y escribiremos nuestras primeras líneas de código, entendiendo los algoritmos y estructuras de datos más básicas.</p>
+                `
+            },
+            { // Slide 2
+                title: "¿Qué es la Ciencia de Datos?",
+                content: `
+                    <p>La Ciencia de Datos es un campo interdisciplinario que utiliza métodos científicos, procesos, algoritmos y sistemas para extraer <strong>conocimiento e insights</strong> a partir de datos, tanto estructurados como no estructurados.</p>
+                    <p>No se trata solo de programar o de saber estadística, sino de la combinación de tres áreas clave:</p>
+                    <ul>
+                        <li><strong>Ciencias de la Computación:</strong> Habilidades para programar, manejar datos y aplicar algoritmos.</li>
+                        <li><strong>Matemáticas y Estadística:</strong> El rigor para modelar los datos y validar los resultados.</li>
+                        <li><strong>Conocimiento de Dominio:</strong> El entendimiento del contexto (negocio, ciencia, etc.) para hacer las preguntas correctas e interpretar los resultados.</li>
+                    </ul>
+                `
+            },
+            { // Slide 3
+                title: "El Proceso de la Ciencia de Datos",
+                content: `
+                    <p>Un proyecto de Data Science sigue un ciclo de vida. Aunque existen modelos formales, podemos simplificarlo en 6 pasos clave:</p>
+                    <ol>
+                        <li><strong>Comprensión del Problema:</strong> ¿Qué pregunta de negocio o científica queremos responder?</li>
+                        <li><strong>Obtención de Datos:</strong> Recolectar los datos necesarios desde distintas fuentes (bases de datos, APIs, archivos).</li>
+                        <li><strong>Preparación de Datos:</strong> Es el paso que más tiempo consume (¡hasta el 80%!). Incluye limpiar, transformar y dar formato a los datos.</li>
+                        <li><strong>Modelado:</strong> Aplicar algoritmos estadísticos o de Machine Learning para encontrar patrones.</li>
+                        <li><strong>Evaluación:</strong> Medir qué tan bien funciona nuestro modelo y si responde a la pregunta inicial.</li>
+                        <li><strong>Comunicación y Despliegue:</strong> Presentar los resultados de forma clara y/o poner el modelo en producción.</li>
+                    </ol>
+                `
+            },
+            { // Slide 4
+                title: "¿Por qué Python para Data Science?",
+                content: `
+                    <p>Python se ha convertido en el lenguaje estándar de facto en la Ciencia de Datos por varias razones:</p>
+                    <ul>
+                        <li><strong>Sintaxis Simple y Legible:</strong> Es fácil de aprender y escribir, lo que permite enfocarse en el problema y no en la complejidad del lenguaje.</li>
+                        <li><strong>Ecosistema de Librerías:</strong> Posee un conjunto de librerías increíblemente poderoso para cada etapa del proceso (NumPy, Pandas, Matplotlib, Scikit-learn, etc.).</li>
+                        <li><strong>Gran Comunidad:</strong> Existe una enorme comunidad global que ofrece soporte, tutoriales y soluciones a casi cualquier problema.</li>
+                        <li><strong>Versatilidad:</strong> Se puede usar para todo el flujo de trabajo, desde la recolección de datos (scraping, APIs) hasta la puesta en producción de modelos complejos.</li>
+                    </ul>
+                `
+            },
+            { // Slide 5
+                title: "Python: Variables y Tipos de Datos",
+                content: `
+                    <p>Comencemos con lo más básico. Una <strong>variable</strong> es un nombre que le asignamos a un valor para poder referenciarlo más tarde.</p>
+                    <p>Python tiene varios tipos de datos fundamentales:</p>
+                    <div class="code-box">
+# Entero (Integer)
+edad = 30
+
+# Decimal (Float)
+precio = 19990.50
+
+# Texto (String)
+nombre = "Carlos Muñoz"
+
+# Lógico (Boolean)
+es_profesor = True
+                    </div>
+                    <p>Python es de tipado dinámico, lo que significa que no necesitas declarar el tipo de una variable; el intérprete lo infiere por ti.</p>
+                `
+            },
+            { // Slide 6
+                title: "Python: Estructuras de Datos Básicas",
+                content: `
+                    <p>Para trabajar con conjuntos de datos, necesitamos estructuras que los contengan.</p>
+                    <ul>
+                        <li><strong>Listas (<code>list</code>):</strong> Una colección ordenada y mutable (se puede cambiar). Son las más versátiles y comunes. Se definen con corchetes <code>[]</code>.
+                        <br><code>notas = [6.5, 7.0, 5.8, 4.9]</code></li>
+                        <li><strong>Tuplas (<code>tuple</code>):</strong> Una colección ordenada e <strong>inmutable</strong> (no se puede cambiar una vez creada). Se definen con paréntesis <code>()</code>.
+                        <br><code>coordenadas = (40.71, -74.00)</code></li>
+                        <li><strong>Diccionarios (<code>dict</code>):</strong> Una colección no ordenada de pares <strong>clave-valor</strong>. Son extremadamente útiles para datos estructurados. Se definen con llaves <code>{}</code>.
+                        <br><code>estudiante = {"nombre": "Javiera", "nota": 6.5}</code></li>
+                    </ul>
+                `
+            },
+             { // Slide 7
+                title: "Python: Algoritmos - Condicionales",
+                content: `
+                    <p>Un algoritmo es una secuencia de pasos para resolver un problema. La lógica condicional nos permite tomar decisiones en nuestro código usando <code>if</code>, <code>elif</code> (else if) y <code>else</code>.</p>
+                    <div class="example-box">
+                        <span class="example-box-title">Ejemplo: ¿Aprobado o Reprobado?</span>
+                        <p>Este código revisa una nota y decide qué mensaje imprimir.</p>
+                        <div class="code-box">
+nota = 3.9
+
+if nota >= 4.0:
+    print("El estudiante ha APROBADO.")
+else:
+    print("El estudiante ha REPROBADO.")
+                        </div>
+                    </div>
+                `
+            },
+            { // Slide 8
+                title: "Python: Algoritmos - Bucles (Loops)",
+                content: `
+                    <p>Los bucles nos permiten repetir una acción múltiples veces sin reescribir el código.</p>
+                    <h3>Bucle <code>for</code></h3>
+                    <p>Se usa para iterar sobre los elementos de una secuencia (como una lista).</p>
+                    <div class="code-box">
+notas = [6.5, 7.0, 5.8]
+for nota_actual in notas:
+    print("Nota:", nota_actual)
+                    </div>
+                    <h3>Bucle <code>while</code></h3>
+                    <p>Se ejecuta mientras una condición sea verdadera.</p>
+                    <div class="code-box">
+contador = 3
+while contador > 0:
+    print(contador)
+    contador = contador - 1 # ¡Importante!
+print("¡Despegue!")
+                    </div>
+                `
+            },
+            { // Slide 9
+                title: "Tu Primer Script de Análisis",
+                content: `
+                    <p>Combinemos todo lo que hemos aprendido para resolver un problema simple de análisis de datos.</p>
+                    <div class="example-box">
+                        <span class="example-box-title">Problema: Calcular el promedio de un curso y contar cuántos aprobaron.</span>
+                        <div class="code-box">
+# Datos
+notas_curso = [6.5, 7.0, 3.2, 4.9, 5.8, 2.1, 4.0]
+
+# Algoritmo
+suma_total = 0
+aprobados = 0
+
+for nota in notas_curso:
+    suma_total = suma_total + nota
+    if nota >= 4.0:
+        aprobados = aprobados + 1
+
+promedio = suma_total / len(notas_curso)
+
+# Resultados
+print(f"Total de estudiantes: {len(notas_curso)}")
+print(f"Promedio del curso: {round(promedio, 1)}")
+print(f"Cantidad de aprobados: {aprobados}")
+                        </div>
+                    </div>
+                `
+            },
+            { // Slide 10
+                title: "Resumen y Próximos Pasos",
+                content: `
+                    <h3>Resumen de la Semana 1</h3>
+                    <ul>
+                        <li>Definimos la <strong>Ciencia de Datos</strong> como un campo interdisciplinario y describimos su proceso.</li>
+                        <li>Entendimos por qué <strong>Python</strong> es la herramienta principal en esta disciplina.</li>
+                        <li>Aprendimos los fundamentos de Python: <strong>variables, tipos de datos, estructuras de datos</strong> (listas, diccionarios) y <strong>algoritmos básicos</strong> (condicionales y bucles).</li>
+                    </ul>
+                    <h3>Próxima Semana: Librerías Fundamentales y APIs</h3>
+                    <p>Según el programa, la próxima semana daremos un gran salto. Dejaremos de usar Python "puro" para aprender a usar las super-potentes librerías <strong>NumPy y Pandas</strong>, que son la base para el manejo de datos a gran escala.</p>
+                `
+            }
+        ];
+
+        // ==========================================================================
+        // LÓGICA DEL SLIDER Y RENDERIZADO (NO REQUIERE CAMBIOS)
+        // ==========================================================================
+        function createContentSlide(slideData) {
+            const slide = document.createElement('div');
+            slide.className = 'slide';
+            slide.innerHTML = `
+                <div class="slide-content">
+                    <h2>${slideData.title}</h2>
+                    ${slideData.content}
+                </div>
+            `;
+            return slide;
+        }
+
+        function initializeSlider() {
+            const slidesContainer = document.querySelector('.slides-container');
+            const prevBtn = document.getElementById('prevBtn'), nextBtn = document.getElementById('nextBtn');
+            let currentSlide = 0;
+
+            slidesContainer.innerHTML = '';
+
+            week_slides_data.forEach(data => {
+                slidesContainer.appendChild(createContentSlide(data));
+            });
+            
+            const slides = document.querySelectorAll('.slide');
+            
+            const goToSlide = (index) => {
+                slidesContainer.style.transform = `translateX(-${index * 100}%)`;
+                slides.forEach((slide, i) => {
+                    slide.classList.toggle('active', i === index);
+                });
+                currentSlide = index;
+                prevBtn.disabled = index === 0;
+                nextBtn.disabled = index === slides.length - 1;
+            }
+            
+            prevBtn.addEventListener('click', () => { if (currentSlide > 0) goToSlide(currentSlide - 1); });
+            nextBtn.addEventListener('click', () => { if (currentSlide < slides.length - 1) goToSlide(currentSlide + 1); });
+            
+            if (slides.length > 0) {
+                 goToSlide(0);
+            }
+        }
+
+        initializeSlider();
+    });
+    </script>
+</body>
+</html>

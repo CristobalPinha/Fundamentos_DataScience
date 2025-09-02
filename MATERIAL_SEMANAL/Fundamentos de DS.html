@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario Académico 2025 - Fundamentos de Data Science</title>
+    <style>
+        :root {
+            --utem-blue: #002b5c; --utem-blue-light: #0077cc; --text-dark: #2d3748; --text-light: #ffffff;
+            --bg-light: #f7fafc; --bg-dark: #1a202c; --surface-light: #ffffff; --surface-dark: #2d3748;
+            --border-color-light: #e2e8f0; --border-color-dark: #4a5568; --holiday-bg: #fee2e2;
+            --holiday-text: #dc2626; --class-bg: #ebf8ff; --class-border: #90cdf4; --class-text: #3182ce;
+            --eval-bg: #fffbeb; --eval-border: #f59e0b; --eval-text: #b45309; --exam-bg: #f3e8ff;
+            --exam-border: #a855f7; --exam-text: #7e22ce; --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08); --border-radius-md: 10px; --border-radius-lg: 16px;
+            --font-family-main: "Century Gothic", "Apple Gothic", "URW Gothic L", sans-serif;
+            --transition-fast: all 0.3s ease-in-out; --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --text-dark: #e2e8f0; --bg-light: var(--bg-dark); --surface-light: var(--surface-dark);
+                --border-color-light: var(--border-color-dark); --holiday-bg: #451a1a; --holiday-text: #f87171;
+                --class-bg: #1e3a8a; --class-border: #60a5fa; --class-text: #bfdbfe; --eval-bg: #4a2f00;
+                --eval-border: #f59e0b; --eval-text: #fde68a; --exam-bg: #4c1d95; --exam-border: #c084fc; --exam-text: #e9d5ff;
+            }
+        }
+        body { font-family: var(--font-family-main); background-color: var(--bg-light); color: var(--text-dark); margin: 0; padding-top: 80px; padding-bottom: 60px; line-height: 1.6; overflow: hidden; }
+        header { background-color: rgba(0, 43, 92, 0.95); backdrop-filter: blur(8px); color: var(--text-light); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-md); position: fixed; top: 0; width: 100%; z-index: 1001; box-sizing: border-box; height: 80px; }
+        .logo { height: 50px; width: auto; }
+        .header-text-container { text-align: right; }
+        .header-title-main { font-size: 1.3em; font-weight: 600; margin: 0; }
+        .header-subtitle-main { font-size: 0.8em; margin: 2px 0; color: #e0e0e0; font-weight: 300; }
+        .contact-info-header { margin-top: 4px; font-size: 0.8em; color: #ced4da; }
+        .contact-info-header a { color: #e9ecef; text-decoration: none; }
+        footer { background-color: rgba(0, 43, 92, 0.95); color: var(--text-light); text-align: center; padding: 12px; position: fixed; width: 100%; bottom: 0; z-index: 1001; font-size: 0.85em; height: 60px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; backdrop-filter: blur(8px); border-top: 1px solid rgba(255, 255, 255, 0.1); }
+        footer p { margin: 2px 0; }
+        main#slider { width: 100%; height: calc(100vh - 140px); position: relative; overflow: hidden; }
+        .slides-container { display: flex; height: 100%; width: 100%; transition: var(--transition-slow); }
+        
+        .slide {
+            width: 100%; height: 100%; flex-shrink: 0; box-sizing: border-box; padding: 2rem;
+            opacity: 0; transform: scale(0.98); transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+        .slide.calendar-slide { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 2rem; }
+        .slide.active { opacity: 1; transform: scale(1); }
+        .slide-content-calendar, .slide-content-details { background-color: var(--surface-light); border: 1px solid var(--border-color-light); border-radius: var(--border-radius-lg); box-shadow: var(--shadow-md); padding: 1.5rem; overflow-y: auto; display: flex; flex-direction: column; }
+        
+        .slide.intro-slide { display: flex; justify-content: center; align-items: center; }
+        .slide-content-intro { background-color: var(--surface-light); border: 1px solid var(--border-color-light); border-radius: var(--border-radius-lg); box-shadow: var(--shadow-md); padding: 2rem 2.5rem; max-width: 900px; width: 80%; max-height: 90%; overflow-y: auto; }
+        .slide-content-intro h2 { font-size: 1.8em; font-weight: 600; color: var(--utem-blue); margin-top: 0; border-bottom: 2px solid var(--utem-blue); padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        .slide-content-intro p { margin-bottom: 1.2rem; line-height: 1.7; text-align: justify; }
+        .slide-content-intro strong { color: var(--utem-blue-light); }
+        
+        .month-title { font-size: 1.8em; font-weight: 600; color: var(--utem-blue); margin: 0 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 2px solid var(--utem-blue); flex-shrink: 0; }
+        @media (prefers-color-scheme: dark) { .month-title, .slide-content-intro h2 { color: var(--utem-blue-light); border-bottom-color: var(--utem-blue-light); } .slide-content-intro strong { color: var(--text-dark); font-weight: 600; } }
+        
+        .calendar-grid { display: grid; grid-template-columns: 30px repeat(7, 1fr); gap: 5px; }
+        .week-label { font-size: 0.7em; font-weight: 600; color: var(--utem-blue-light); display: flex; align-items: center; justify-content: center; writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg); }
+        .day-header, .day { text-align: center; font-size: 0.85em; }
+        .day-header { font-weight: 600; color: var(--utem-blue-light); padding-bottom: 8px; }
+        .day { padding: 5px 2px; border-radius: var(--border-radius-md); display: flex; flex-direction: column; justify-content: space-between; min-height: 48px; border: 1px solid transparent; }
+        .day-number { font-size: 1em; font-weight: 500; }
+        .day-label { font-size: 0.7em; font-weight: 500; margin-top: 2px; line-height: 1.1; }
+        .other-month { opacity: 0.3; }
+        .sunday .day-number { color: var(--holiday-text); font-weight: bold; }
+        .holiday { background-color: var(--holiday-bg); color: var(--holiday-text); font-weight: bold; border: 1px solid var(--holiday-text); }
+        .class-day { background-color: var(--class-bg); color: var(--class-text); }
+        .eval-day { background-color: var(--eval-bg); color: var(--eval-text); font-weight: bold; border: 1px solid var(--eval-border); }
+        .exam-day { background-color: var(--exam-bg); color: var(--exam-text); font-weight: bold; border: 1px solid var(--exam-border); }
+        
+        .details-list .detail-item { padding: 0.7rem 1rem; border-radius: var(--border-radius-md); margin-bottom: 0.6rem; border-left: 4px solid; }
+        .detail-item.class-item { border-left-color: var(--class-text); background-color: var(--class-bg); }
+        .detail-item.eval-item { border-left-color: var(--eval-text); background-color: var(--eval-bg); }
+        .detail-item.exam-item { border-left-color: var(--exam-text); background-color: var(--exam-bg); }
+        .detail-title { font-weight: bold; font-size: 0.95em; }
+        .detail-dates { font-size: 0.8em; opacity: 0.8; margin-bottom: 2px; }
+        .detail-summary { font-size: 0.85em; line-height: 1.3; }
+        
+        .nav-button { position: absolute; top: 50%; transform: translateY(-50%); background-color: rgba(0, 43, 92, 0.6); color: white; border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; z-index: 100; display: flex; align-items: center; justify-content: center; transition: var(--transition-fast); }
+        .nav-button:hover { background-color: var(--utem-blue); transform: translateY(-50%) scale(1.1); }
+        .nav-button:disabled { background-color: #9ca3af; cursor: not-allowed; opacity: 0.5; }
+        #prevBtn { left: 1rem; }
+        #nextBtn { right: 1rem; }
+        
+        @media (max-width: 900px) {
+            body { padding-top: 70px; }
+            header { height: 70px; padding: 5px 15px; flex-direction: row-reverse; }
+            .logo { height: 40px; }
+            main#slider { height: calc(100vh - 130px); }
+            .slide, .slide.calendar-slide { display: flex; flex-direction: column; padding: 1rem; gap: 1rem; height: 100%; overflow-y: auto; }
+            .slide-content-calendar, .slide-content-details, .slide-content-intro { width: 100%; flex-basis: auto; height: auto; box-sizing: border-box; flex-shrink: 0; padding: 1rem; max-width: none; }
+            .month-title, .slide-content-intro h2 { font-size: 1.5em; }
+            .calendar-grid { grid-template-columns: 20px repeat(7, 1fr); gap: 4px; }
+            .day { padding: 6px 2px; min-height: 45px; }
+            .day-number { font-size: 0.85em; }
+            .week-label { font-size: 0.6em; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-text-container">
+            <h1 class="header-title-main">Fundamentos de Data Science</h1>
+            <p class="header-subtitle-main">Planificación Semestral 2025</p>
+            <div class="contact-info-header">
+                <span>Carlos Muñoz S. - </span><a href="mailto:c.munozs@utem.cl">c.munozs@utem.cl</a>
+            </div>
+        </div>
+        <img src="https://cdn.remotexs.co/institute-logos/sibutemnewlogo1.png" alt="Logo UTEM" class="logo" onerror="this.style.display='none'">
+    </header>
+    <main id="slider">
+        <div class="slides-container"></div>
+        <button id="prevBtn" class="nav-button" title="Anterior"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg> </button>
+        <button id="nextBtn" class="nav-button" title="Siguiente"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg> </button>
+    </main>
+    <footer>
+        <p>&copy; 2025 Universidad Tecnológica Metropolitana</p>
+        <p>Departamento de Informática y Computación</p>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // ==========================================================================
+        // 1. BASE DE DATOS PARA "FUNDAMENTOS DE DATA SCIENCE"
+        // ==========================================================================
+        const classContentData = [
+            { title: "Introducción a Python y Data Science", summary: "Visión general de la disciplina. Introducción a Python, algoritmos y estructuras de datos básicas." },
+            { title: "Librerías Fundamentales y APIs", summary: "Manejo de librerías (NumPy, Pandas) y consumo de APIs para la obtención de datos." },
+            { title: "Estadística Aplicada y Visualización", summary: "Aplicación de estadística descriptiva y uso de librerías como Matplotlib y Seaborn." },
+            { title: "Modelos Predictivos: Regresión", summary: "Introducción a los modelos de regresión lineal y evaluación de su rendimiento." },
+            { title: "Modelos Predictivos: Clasificación", summary: "Estudio de modelos de clasificación como Regresión Logística y K-NN. Métricas de evaluación." },
+            { title: "Árboles de Decisión y Regularización", summary: "Modelos basados en árboles, ensambles (Random Forest) y técnicas para evitar el sobreajuste." },
+            { title: "Introducción a Redes Neuronales", summary: "Fundamentos del Perceptrón, Redes Feedforward y el algoritmo de Backpropagation (conceptual)." },
+            { title: "Deep Learning con Keras y TensorFlow", summary: "Taller práctico para la construcción de modelos de Deep Learning para clasificación." },
+            { title: "SQL para Data Science: Consultas y Análisis", summary: "Consultas SQL para análisis y exploración de datos en bases de datos relacionales." },
+            { title: "SQL para Data Science: Modelación e Integración", summary: "Modelación de datos para análisis e integración con Python usando SQLAlchemy." },
+            { title: "Taller Práctico Integrador", summary: "Taller práctico para la preparación del trabajo práctico final, integrando los contenidos del curso." },
+        ];
+        const calendarMonths = [ { year: 2025, month: 7, name: "Agosto" }, { year: 2025, month: 8, name: "Septiembre" }, { year: 2025, month: 9, name: "Octubre" }, { year: 2025, month: 10, name: "Noviembre" }, { year: 2025, month: 11, name: "Diciembre" } ];
+        const criticalDates = {
+            holidays: ["2025-08-15", "2025-10-31", "2025-12-08", "2025-12-25"],
+            specialWeeks: [
+                { start: "2025-09-08", end: "2025-09-12", title: "Evaluación 1: Trabajo Práctico 1", summary: "Entrega del primer trabajo práctico sobre análisis exploratorio de datos (30%).", type: 'eval' },
+                { start: "2025-09-15", end: "2025-09-21", title: "Receso Fiestas Patrias", summary: "Suspensión de actividades académicas.", type: 'holiday' },
+                { start: "2025-10-20", end: "2025-10-24", title: "Evaluación 2: Entrega Estudio de Caso", summary: "Entrega del estudio de caso sobre modelamiento predictivo (35%).", type: 'eval' },
+                { start: "2025-10-27", end: "2025-10-31", title: "Semana de Autoaprendizaje", summary: "Semana destinada al trabajo autónomo del estudiante.", type: 'holiday' },
+                { start: "2025-12-01", end: "2025-12-05", title: "Evaluación 3: Trabajo Práctico Final", summary: "Presentación del trabajo práctico final sobre un proyecto de Data Science completo (35%).", type: 'eval' },
+                { start: "2025-12-15", end: "2025-12-19", title: "EXAMEN FINAL", summary: "Período de examen final de la asignatura.", type: 'exam' },
+                { start: "2025-12-22", end: "2025-12-26", title: "Cierre de Actas", summary: "Proceso administrativo de cierre de semestre.", type: 'exam' }
+            ],
+            semesterStart: "2025-08-11", semesterEnd: "2025-12-26"
+        };
+        
+        let academicPlan = [];
+        
+        // ==========================================================================
+        // 2. LÓGICA CENTRAL DE DATOS (NO REQUIERE CAMBIOS)
+        // ==========================================================================
+        function generateAcademicPlan() {
+            let currentDate = new Date(criticalDates.semesterStart + 'T12:00:00');
+            const endDate = new Date(criticalDates.semesterEnd + 'T12:00:00');
+            let semesterWeekCounter = 1;
+            let classIndex = 0;
+            while (currentDate <= endDate) {
+                const dateString = currentDate.toISOString().split('T')[0];
+                const specialWeek = criticalDates.specialWeeks.find(w => w.start === dateString);
+                if (specialWeek) {
+                    academicPlan.push({ ...specialWeek, weekNumber: semesterWeekCounter });
+                } else {
+                    if (classIndex < classContentData.length) {
+                        const classInfo = classContentData[classIndex];
+                        academicPlan.push({
+                            start: dateString, end: new Date(currentDate.getTime() + 4 * 864e5).toISOString().split('T')[0],
+                            title: `Semana ${semesterWeekCounter}: ${classInfo.title}`, summary: classInfo.summary,
+                            type: 'class', classNumber: classIndex + 1, weekNumber: semesterWeekCounter
+                        });
+                        classIndex++;
+                    }
+                }
+                semesterWeekCounter++;
+                currentDate.setDate(currentDate.getDate() + 7);
+            }
+        }
+
+        function getDayInfo(dateString) {
+            if (criticalDates.holidays.includes(dateString)) return { type: 'holiday', label: 'Feriado' };
+            const event = academicPlan.find(e => dateString >= e.start && dateString <= e.end);
+            if(event) {
+                let label = '';
+                if(event.type === 'class') label = `Clase ${event.classNumber}`;
+                if(event.type === 'eval') label = `Evaluación`;
+                if(event.type === 'holiday') label = 'Receso';
+                if(event.type === 'exam') label = 'Examen';
+                return { type: event.type + (event.type !== 'holiday' ? '-day' : ''), label };
+            }
+            return null;
+        }
+
+        function createDetailsList(monthInfo) {
+            let html = `<h2 class="month-title">Eventos del Mes</h2><div class="details-list">`;
+            const formatDate = (d) => new Date(d + 'T12:00:00').toLocaleDateString('es-CL', { day: 'numeric', month: 'short' });
+            
+            const eventsInMonth = academicPlan
+                .filter(e => e.type !== 'holiday' && new Date(e.start + 'T12:00:00').getMonth() === monthInfo.month)
+                .sort((a, b) => new Date(a.start) - new Date(b.start));
+
+            if (eventsInMonth.length > 0) {
+                eventsInMonth.forEach(e => {
+                    const dateRange = e.start !== e.end ? `${formatDate(e.start)} - ${formatDate(e.end)}` : formatDate(e.start);
+                    html += `<div class="detail-item ${e.type}-item"><div class="detail-dates">${dateRange}</div><div class="detail-title">${e.title}</div><div class="detail-summary">${e.summary}</div></div>`;
+                });
+            } else { html += '<p>No hay eventos programados.</p>'; }
+            return html + '</div>';
+        }
+
+        function createCalendar(monthInfo) {
+            const { year, month } = monthInfo;
+            const firstDay = new Date(year, month, 1), lastDay = new Date(year, month + 1, 0);
+            let startDay = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+            let html = `<h2 class="month-title">${monthInfo.name} ${year}</h2><div class="calendar-grid">`;
+            ['', 'L', 'M', 'M', 'J', 'V', 'S', 'D'].forEach(d => html += `<div class="day-header">${d}</div>`);
+            let dateCounter = new Date(firstDay);
+            dateCounter.setDate(dateCounter.getDate() - startDay);
+
+            for(let i = 0; i < 6; i++){
+                if(dateCounter > lastDay && i > 3) break;
+                
+                const startOfWeekString = dateCounter.toISOString().split('T')[0];
+                const weekEvent = academicPlan.find(e => e.start === startOfWeekString);
+                let weekLabelHtml = weekEvent ? `S${weekEvent.weekNumber}` : '';
+                html += `<div class="week-label">${weekLabelHtml}</div>`;
+                
+                for(let j = 0; j < 7; j++) {
+                    const dateString = dateCounter.toISOString().split('T')[0];
+                    const dayInfo = getDayInfo(dateString);
+                    const isCurrentMonth = dateCounter.getMonth() === month;
+                    const isSunday = dateCounter.getDay() === 0;
+                    html += `<div class="day ${dayInfo ? dayInfo.type : ''} ${isCurrentMonth ? '' : 'other-month'} ${isSunday ? 'sunday' : ''}"><div class="day-number">${dateCounter.getDate()}</div><div class="day-label">${dayInfo ? dayInfo.label : ''}</div></div>`;
+                    dateCounter.setDate(dateCounter.getDate() + 1);
+                }
+            }
+            return html + '</div>';
+        }
+        
+        // ==========================================================================
+        // 3. LÓGICA DEL SLIDER Y RENDERIZADO
+        // ==========================================================================
+        function createIntroSlide() {
+            const slide = document.createElement('div');
+            slide.className = 'slide intro-slide';
+            slide.innerHTML = `
+                <div class="slide-content-intro">
+                    <h2>Normas para la entrega y presentación de trabajos grupales</h2>
+                    <p><strong>Grupos y Asistencia:</strong> Los trabajos se deberán realizar en grupos de máximo tres estudiantes. Todos los integrantes del grupo deben estar presentes en cada una de las presentaciones o entregas de trabajo, sin excepción.</p>
+                    <p><strong>Justificaciones:</strong> En caso de inconveniente justificado, el estudiante deberá avisar con antelación tanto al profesor como al departamento correspondiente, entregando la justificación necesaria (certificado médico, carta formal, etc.).</p>
+                    <p><strong>Sanción por Inasistencia:</strong> Si no se presenta dicho aviso o no se valida la justificación, todo el grupo será calificado con nota mínima (1,0), sin derecho a apelación.</p>
+                    <p><strong>Envío y Formato:</strong> Los trabajos deben enviarse únicamente al correo electrónico del profesor, respetando estrictamente las instrucciones y condiciones establecidas (formato, nombre del archivo, fecha y hora de entrega).</p>
+                    <p><strong>Penalización:</strong> El incumplimiento de estas condiciones básicas implicará una penalización automática de 1 punto en la nota final del trabajo. Por ejemplo, si el grupo obtiene una nota 7,0, esta se reducirá a 6,0.</p>
+                    <p><strong>Coherencia y Calidad:</strong> Las respuestas entregadas que no cumplan con los criterios establecidos, o no reflejen un trabajo serio y coherente, afectarán al grupo completo, ya que se evaluará de forma colectiva.</p>
+                    <p><strong>Uso de IA:</strong> Se permite el uso de herramientas de Inteligencia Artificial Generativa (IA). No obstante, esto no exime a los estudiantes de responder preguntas de análisis profundo, crítica o interpretación, que podrían surgir durante la presentación. Se espera que el grupo comprenda y pueda defender su trabajo con claridad.</p>
+                </div>
+            `;
+            return slide;
+        }
+
+        function initializeSlider() {
+            generateAcademicPlan();
+            const slidesContainer = document.querySelector('.slides-container');
+            const prevBtn = document.getElementById('prevBtn'), nextBtn = document.getElementById('nextBtn');
+            let currentSlide = 0;
+
+            slidesContainer.appendChild(createIntroSlide());
+
+            calendarMonths.forEach(monthInfo => {
+                const slide = document.createElement('div');
+                slide.className = 'slide calendar-slide';
+                slide.innerHTML = `<div class="slide-content-calendar">${createCalendar(monthInfo)}</div><div class="slide-content-details">${createDetailsList(monthInfo)}</div>`;
+                slidesContainer.appendChild(slide);
+            });
+            
+            const slides = document.querySelectorAll('.slide');
+            const goToSlide = (index) => {
+                slidesContainer.style.transform = `translateX(-${index * 100}%)`;
+                slides.forEach((slide, i) => {
+                    slide.classList.toggle('active', i === index);
+                });
+                currentSlide = index;
+                prevBtn.disabled = index === 0;
+                nextBtn.disabled = index === slides.length - 1;
+            }
+            
+            prevBtn.addEventListener('click', () => { if (currentSlide > 0) goToSlide(currentSlide - 1); });
+            nextBtn.addEventListener('click', () => { if (currentSlide < slides.length - 1) goToSlide(currentSlide + 1); });
+            
+            goToSlide(0);
+        }
+
+        initializeSlider();
+    });
+    </script>
+</body>
+</html>
