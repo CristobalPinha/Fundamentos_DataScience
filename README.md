@@ -7,6 +7,8 @@ Repositorio con los **ejercicios, tareas y material del curso de Fundamentos de 
 ## 📂 Estructura del Proyecto
 
 ```
+=========== Ejercicios y Material ===========
+
 📁 EJERCICIOS_CLASE/
 ├── 📁 Clase 1/
 │   ├── Ejercicio_1.py
@@ -20,6 +22,8 @@ Repositorio con los **ejercicios, tareas y material del curso de Fundamentos de 
 ├── Semana 1.html
 └── Semana 2.html
 
+=========== Tareas para el Profesor ===========
+
 📁 TAREA_1/
 ├── Diccionario.py
 ├── Pregunta_1.py
@@ -28,7 +32,7 @@ Repositorio con los **ejercicios, tareas y material del curso de Fundamentos de 
 ├── Pregunta_4.py
 └── Pregunta_5.py
 
-📁 TAREA_2/
+📁 TAREA_2/ Desarrollando ...
 ```
 ---
 
