@@ -54,9 +54,8 @@ Este repositorio contiene material de apoyo al curso de **Fundamentos de Data Sc
 
 ## ✅ Estado del Proyecto
 
-- [x] Ejercicios de Clase  
-- [x] Material Semanal (Semanas 1 y 2)  
-- [ ] Tarea 2 en desarrollo  
+- [x] Tarea 1 `Listo`
+- [ ] Tarea 2 `Desarrollando`  
 
 ---
 
