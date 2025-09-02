@@ -6,29 +6,30 @@ Repositorio con los **ejercicios, tareas y material del curso de Fundamentos de 
 
 ## 📂 Estructura del Proyecto
 
-'''
-📂 EJERCICIOS_CLASE/
-│ 📂 Clase_1/
-│ │ ├── Ejercicio_1.py
-│ │ ├── Ejercicio_2.py
-│ │ ├── Ejercicio_3.py
-│ │ └── Ejercicio_4.py
-│ 📂 Clase_2/
-│
-📂 MATERIAL_SEMANAL/
-│ ├── Fundamentos_de_DS.html
-│ ├── Semana_1.html
-│ └── Semana_2.html
-│
-📂 TAREA_1/
-│ ├── Diccionario.py
-│ ├── Pregunta_1.py
-│ ├── Pregunta_2.py
-│ ├── Pregunta_3.py
-│ └── Pregunta_4.py
-│
-📂 TAREA_2/ # (En desarrollo)
-'''
+```
+📁 EJERCICIOS_CLASE/
+├── 📁 Clase 1/
+│   ├── Ejercicio_1.py
+│   ├── Ejercicio_2.py
+│   ├── Ejercicio_3.py
+│   └── Ejercicio_4.py
+└── 📁 Clase 2/
+
+📁 MATERIAL_SEMANAL/
+├── Fundamentos de DS.html
+├── Semana 1.html
+└── Semana 2.html
+
+📁 TAREA_1/
+├── Diccionario.py
+├── Pregunta_1.py
+├── Pregunta_2.py
+├── Pregunta_3.py
+├── Pregunta_4.py
+└── Pregunta_5.py
+
+📁 TAREA_2/
+```
 ---
 
 ## 📖 Descripción
