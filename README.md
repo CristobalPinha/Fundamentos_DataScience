@@ -32,7 +32,13 @@ Repositorio con los **ejercicios, tareas y material del curso de Fundamentos de 
 ├── Pregunta_4.py
 └── Pregunta_5.py
 
-📁 TAREA_2/ Desarrollando ...
+📁 TAREA_2/
+├── estudiantes.csv
+├── Pregunta_1.py
+├── Pregunta_2.py
+├── Pregunta_3.py
+├── Pregunta_4.py
+└── Pregunta_5.py
 ```
 ---
 
