@@ -65,7 +65,7 @@ Este repositorio contiene material de apoyo al curso de **Fundamentos de Data Sc
 ## 📚 Progreción de tareas
 
 - [x] Tarea 1 `✅ Terminado`
-- [ ] Tarea 2 `⏳ Desarrollando`  
+- [x] Tarea 2 `✅ Terminado`
 
 ---
 
