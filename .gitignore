@@ -97,7 +97,6 @@ dmypy.json
 .pyre/
 
 # Data Science specific
-*.csv
 *.data
 *.db
 *.log
