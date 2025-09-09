@@ -32,7 +32,13 @@ Repositorio con los **ejercicios, tareas y material del curso de Fundamentos de 
 ├── Pregunta_4.py
 └── Pregunta_5.py
 
-📁 TAREA_2/ Desarrollando ...
+📁 TAREA_2/
+├── estudiantes.csv
+├── Pregunta_1.py
+├── Pregunta_2.py
+├── Pregunta_3.py
+├── Pregunta_4.py
+└── Pregunta_5.py
 ```
 ---
 
@@ -59,7 +65,7 @@ Este repositorio contiene material de apoyo al curso de **Fundamentos de Data Sc
 ## 📚 Progreción de tareas
 
 - [x] Tarea 1 `✅ Terminado`
-- [ ] Tarea 2 `⏳ Desarrollando`  
+- [x] Tarea 2 `✅ Terminado`
 
 ---
 
