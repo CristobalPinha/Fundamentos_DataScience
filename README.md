@@ -7,6 +7,7 @@ Repositorio con los **ejercicios, tareas y material del curso de Fundamentos de 
 ## 📂 Estructura del Proyecto
 
 ```
+
 =========== Ejercicios y Material ===========
 
 📁 EJERCICIOS_CLASE/
@@ -39,6 +40,17 @@ Repositorio con los **ejercicios, tareas y material del curso de Fundamentos de 
 ├── Pregunta_3.py
 ├── Pregunta_4.py
 └── Pregunta_5.py
+
+📁 TAREA_3_PKMN/
+├── Agrupamiento_Analisis.py
+├── Analisis.py
+├── Estadistica_Desc_Basica.py
+├── Filtro_Seleccion.py
+├── Leer_Limpiar.py
+├── Manipulacion_Datos.py
+├── pokemon_primeragen.csv
+├── Preguntas_7_8.txt
+└── Visualizacion_Datos.py
 ```
 ---
 
