@@ -1,0 +1,168 @@
+RESPUESTAS A PREGUNTAS 7 Y 8 - ANÁLISIS EXPLORATORIO E INTERPRETACIÓN
+================================================================
+
+PREGUNTA 7: ANÁLISIS EXPLORATORIO (EDA)
+=======================================
+
+7.1 ¿Existen tipos de Pokémon que tienden a tener mayor ataque o defensa?
+-------------------------------------------------------------------------
+
+SÍ, existe una clara tendencia por tipos:
+
+TIPOS CON MAYOR ATAQUE (basado en promedios obtenidos):
+- Lucha: 102.9 (el más alto - especializado en ataque físico)
+- Dragón: 94.0 (segundo lugar - balanceado ofensivo)
+- Fuego: 83.9 (tercero - ofensivo moderado)
+- Roca: 82.2 (cuarto - sorprendentemente ofensivo)
+- Tierra: 81.9 (quinto - balanceado)
+
+TIPOS CON MAYOR DEFENSA (basado en promedios obtenidos):
+- Roca: 110.0 (el más alto - ESPECIALIZADO en defensa, 27+ puntos sobre el segundo)
+- Tierra: 86.2 (segundo lugar - tanque secundario)
+- Agua: 77.5 (tercero - defensivo moderado)
+- Planta: 69.6 (cuarto - equilibrado)
+- Dragón: 68.3 (quinto - balanceado)
+
+TIPOS CON MENOR ATAQUE:
+- Fantasma: 50.0 (el más bajo - muy limitados en 1ra gen)
+- Eléctrico: 62.0 (especializado en velocidad, no ataque)
+- Bicho: 63.8 (pokémon débiles en general)
+
+TIPOS CON MENOR DEFENSA:
+- Fantasma: 45.0 (el más débil defensivamente)
+- Normal: 55.0 (muy variable, promedio bajo)
+- Bicho: 57.1 (frágiles en general)
+
+CONCLUSIÓN: Los tipos Lucha (ataque) y Roca (defensa) son los más especializados. Dragón es el más balanceado ofensivamente. Fantasma es consistentemente débil en ambas áreas.
+
+7.2 ¿Hay correlación entre ataque y velocidad?
+----------------------------------------------
+
+CORRELACIÓN CALCULADA: 0.193
+
+INTERPRETACIÓN: Existe una correlación POSITIVA DÉBIL entre ataque y velocidad.
+- Es una correlación baja (0.193 < 0.3) pero estadísticamente significativa
+- Indica una LIGERA tendencia: Pokémon con mayor ataque tienden a tener algo más de velocidad
+- Sin embargo, NO es una relación fuerte, por lo que muchos Pokémon rompen este patrón
+- La mayoría de la variación en velocidad NO se explica por el ataque
+
+CONCLUSIÓN: Aunque existe una tendencia muy débil, ataque y velocidad son en gran medida independientes en el diseño de Pokémon.
+
+7.3 ¿Qué tan dispersos están los PS dentro de cada tipo?
+--------------------------------------------------------
+
+DISPERSIÓN DE PS POR TIPO (Desviación Estándar obtenida):
+
+ALTA DISPERSIÓN (más variabilidad interna):
+- Normal: 44.9 (EXTREMADAMENTE heterogéneo - desde Caterpie hasta Snorlax)
+- Tierra: 29.1 (segunda mayor variabilidad)
+- Agua: 29.0 (tercera - tipo muy diverso)
+- Dragón: 25.2 (moderada, pero solo 3 especies)
+
+BAJA DISPERSIÓN (más homogéneo):
+- Bicho: 12.0 (MUY consistente - pokémon similares)
+- Fantasma: 15.0 (solo 3 especies, similares)
+- Planta: 15.2 (bastante consistente)
+- Fuego: 17.2 (moderadamente consistente)
+
+INTERPRETACIÓN POR TIPO:
+- **Normal (σ=44.9)**: Incluye desde pokémon muy débiles (25 PS) hasta Chansey (250 PS)
+- **Bicho (σ=12.0)**: Pokémon muy similares en diseño (35-70 PS)
+- **Agua**: Gran diversidad desde básicos débiles hasta tanques
+- **Dragón**: Consistentes pero pocos ejemplares (3 líneas evolutivas)
+
+7.4 Identificación de outliers usando método IQR
+------------------------------------------------
+
+OUTLIERS EN ATAQUE:
+- **Cantidad encontrada: 0**
+- **Límites calculados**: -7.5 a 148.5
+- **Interpretación**: No hay pokémon con ataque extremadamente atípico en 1ra generación
+- **Conclusión**: El diseño de ataque es relativamente balanceado
+
+OUTLIERS EN PS (Puntos de Salud):
+- **Cantidad encontrada: 3 pokémon**
+- **Límites calculados**: -7.5 a 132.5
+- **Outliers identificados**:
+  1. **Chansey (Normal)**: 250 PS - EXTREMO outlier defensivo
+  2. **Snorlax (Normal)**: 160 PS - Outlier alto
+  3. **Wigglytuff (Normal)**: 140 PS - Outlier moderado
+
+**Patrón importante**: TODOS los outliers de PS son tipo Normal, confirmando la alta dispersión de este tipo.
+
+PREGUNTA 8: EJERCICIOS DE INTERPRETACIÓN
+========================================
+
+8.1 Conclusiones sobre los Pokémon de la primera generación
+-----------------------------------------------------------
+
+CARACTERÍSTICAS GENERALES CONFIRMADAS:
+
+1. **ESPECIALIZACIÓN CLARA POR TIPOS**:
+   - **Lucha**: Atacantes físicos puros (102.9 ataque, 61.0 defensa)
+   - **Roca**: Tanques defensivos extremos (110.0 defensa vs 82.2 ataque)
+   - **Eléctrico**: Veloces pero frágiles (62.0 ataque, 64.7 defensa)
+   - **Fantasma**: Limitados y débiles (solo 3 pokémon, stats bajas)
+
+2. **DIVERSIDAD INTERNA VARIABLE**:
+   - **Alta diversidad**: Normal (σ=44.9), Agua (σ=29.0), Tierra (σ=29.1)
+   - **Baja diversidad**: Bicho (σ=12.0), Fantasma (σ=15.0), Planta (σ=15.2)
+   - **Implicación**: Algunos tipos ofrecen muchas opciones estratégicas, otros son más limitados
+
+3. **DESIGN PHILOSOPHY CONFIRMADO**:
+   - Compensación clara: tipos fuertes en una stat, débiles en otra
+   - Pocas correlaciones fuertes entre estadísticas (independencia de diseño)
+   - Outliers concentrados en tipo Normal (mayor experimentación)
+
+4. **BALANCE GENERAL**:
+   - No hay tipos "perfectos" - todos tienen debilidades claras
+   - Especialización > Generalización en la mayoría de casos
+   - Outliers representan roles únicos (Chansey como wall especial)
+
+8.2 ¿Qué tipo sería "más balanceado"? ¿Y el más especializado?
+-------------------------------------------------------------
+
+TIPO MÁS BALANCEADO: **DRAGÓN**
+**Justificación con datos**:
+- Ataque: 94.0 (2do lugar - ofensivo fuerte)
+- Defensa: 68.3 (5to lugar - defensivo moderado)
+- Dispersión PS: 25.2 (moderada - consistencia razonable)
+- **Razón**: Únicos con stats altas en múltiples áreas sin especializarse extremadamente
+- **Limitación**: Solo 3 líneas evolutivas en 1ra generación
+
+TIPO MÁS ESPECIALIZADO: **ROCA**
+**Justificación con datos**:
+- Defensa: 110.0 (1er lugar por AMPLIO margen - +23.8 sobre segundo lugar)
+- Ataque: 82.2 (4to lugar - no extremadamente bajo)
+- **Especialización**: 27+ puntos de diferencia entre su stat principal y la competencia
+- **Rol definido**: Tanques defensivos puros
+- **Consistencia**: σ=19.8 (moderadamente consistente)
+
+TIPO MENOS BALANCEADO: **LUCHA**
+**Justificación con datos**:
+- Ataque: 102.9 (1er lugar - extremo)
+- Defensa: 61.0 (bajo-medio)
+- **Diferencia**: ~42 puntos entre ataque y defensa promedio
+- **Rol**: Glass cannons puros (atacantes frágiles)
+
+TIPO MÁS VERSÁTIL INTERNAMENTE: **NORMAL**
+**Justificación con datos**:
+- Dispersión PS: 44.9 (EXTREMA - la más alta)
+- Rango PS: 25-250 (225 puntos de diferencia)
+- **3 outliers de PS**: Todos tipo Normal
+- **Implicación**: Ofrece la mayor variedad de roles estratégicos
+
+CONCLUSIONES FINALES BASADAS EN DATOS:
+=====================================
+
+1. **Especialización Confirmada**: Los datos confirman que la 1ra generación priorizó roles específicos por tipo sobre balance general
+
+2. **Diversidad Estratégica**: Tipos como Normal y Agua ofrecen múltiples opciones, mientras que Bicho y Fantasma son más limitados
+
+3. **Design Intent**: Las correlaciones débiles (0.193 ataque-velocidad) confirman diseño intencional de independencia entre stats
+
+4. **Outliers Significativos**: Chansey, Snorlax y Wigglytuff representan experimentos de design únicos en roles defensivos extremos
+
+5. **Balance del Meta**: El sistema funciona por compensación (fortalezas/debilidades claras) rather than homogeneización
+
+Los datos respaldan completamente la filosofía de diseño de especialización tipo-específica de la primera generación Pokémon.
