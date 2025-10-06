@@ -43,7 +43,6 @@ Y_pred = modelo.predict(X_test)
 rmse = np.sqrt(mean_squared_error(Y_test, Y_pred))
 r2 = r2_score(Y_test, Y_pred)
 
-print("\nResultados de la evaluación (Precio_UF vs Características del Departamento):")
-
-print(f"\nError cuadrático medio: {rmse:.2f}")
-print(f"R^2: {r2:.2f}\n")
+print(f'\nResultados de la evaluación (Precio_UF vs Características del Departamento):\n')
+print(f'RMSE: {rmse:.2f} en promedio, las predicciones se desvían en {rmse:.2f} UF')
+print(f'R²: {r2:.2f}, (El {r2:.0%} de la variabilidad del precio se explica por las características del departamento)')
